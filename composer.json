@@ -1,5 +1,5 @@
 {
-  "name": "pinguinio/puffin-includes",
+  "name": "pinguinio/puffin-framework",
   "require": {
 	"mustache/mustache": "~2.7",
 	"phroute/phroute" :  "~2.0"
