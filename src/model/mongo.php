@@ -132,9 +132,9 @@ class mongo
 
 	public function timestamp()
 	{
-		$dt = new DateTime(date('Y-m-d H:i:s'), new \DateTimeZone('UTC'));
+		$dt = new \DateTime(date('Y-m-d H:i:s'), new \DateTimeZone('UTC'));
 		$ts = $dt->getTimestamp();
-		return new MongoDate($ts);
+		return new \MongoDate($ts);
 	}
 
 	protected function validate()
