@@ -34,7 +34,7 @@ define("DEFAULT_DSN", 'default');
 #							it exists. Otherwise returns false.
 #
 
-class dsn extends nest
+class dsn
 {
 	protected static $dictionary = array();
 	public static $defined_dsns = array();
@@ -72,6 +72,7 @@ class dsn extends nest
 		{
 			self::$defined_dsns['default'] = self::initialize( $connection_info );
 		}
+
 	}
 
 	public static function initialize( $connection_info )
@@ -80,8 +81,8 @@ class dsn extends nest
 		switch ($type)
 		{
 			case 'mongo':
-			break;
 				return self::initialize_mongo( $connection_info );
+				break;
 			default:
 				return self::initialize_pdo( $connection_info );
 			break;
@@ -114,6 +115,7 @@ class dsn extends nest
 
 	public static function initialize_mongo( $connection_info )
 	{
+
 		extract($connection_info);
 
 		if( !isset($port) && empty($port) )
@@ -121,9 +123,9 @@ class dsn extends nest
 			$port = 27017;
 		}
 
-		return new MongoClient
+		return new \MongoClient
 		(
-			"mongodb://$addr:$port;";,
+			"mongodb://$addr:$port;",
 			[
 				'username' => $user,
 				'password' => $pass,
