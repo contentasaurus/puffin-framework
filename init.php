@@ -5,8 +5,6 @@ use \puffin\app as app;
 
 ############################################
 
-<?php
-
 if( !defined(SERVER_ROOT) ){ define('SERVER_ROOT', dirname($_SERVER['DOCUMENT_ROOT'])); }
 if( !defined(APP_PATH) ){ define('APP_PATH', SERVER_ROOT.'/app'); }
 if( !defined(VENDOR_PATH) ){ define('VENDOR_PATH', SERVER_ROOT.'/vendor'); }
