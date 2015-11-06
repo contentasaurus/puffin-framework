@@ -9,7 +9,8 @@
   },
   "autoload": {
     "psr-4":{
-      "puffin\\": "src/"
+      "puffin\\": "src/",
+      "files": ["init.php"]
     }
   }
 }
