@@ -36,7 +36,7 @@ class mongo
 
 	protected function set_collection()
 	{
-		return $this->_collection = $this->db->selectCollection( $this->collection_name );
+		return $this->_collection = $this->_db->selectCollection( $this->collection_name );
 	}
 
 	protected function db()
@@ -46,7 +46,7 @@ class mongo
 
 	protected function set_db()
 	{
-		return $this->connection()->selectDB( $this->db );
+		return $this->_connection->selectDB( $this->db );
 	}
 
 	#======================================================================
@@ -69,7 +69,7 @@ class mongo
 	{
 		if( $id )
 		{
-			return $this->collection()->findOne( [ '_id' => new MongoId($id) ]);
+			return $this->collection()->findOne( [ '_id' => new \MongoId($id) ]);
 		}
 		else
 		{
@@ -132,9 +132,9 @@ class mongo
 
 	public function timestamp()
 	{
-		$dt = new DateTime(date('Y-m-d H:i:s'), new DateTimeZone('UTC'));
+		$dt = new \DateTime(date('Y-m-d H:i:s'), new \DateTimeZone('UTC'));
 		$ts = $dt->getTimestamp();
-		return new MongoDate($ts);
+		return new \MongoDate($ts);
 	}
 
 	protected function validate()
