@@ -3,6 +3,8 @@ namespace puffin;
 use \Phroute\Phroute\RouteCollector as RouteCollector;
 use \Phroute\Phroute\Dispatcher as Dispatcher;
 
+require_once '../init.php';
+
 class app
 {
     public static $router;
