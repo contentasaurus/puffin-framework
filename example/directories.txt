@@ -1,0 +1,23 @@
+/ Server Root
+|	/app
+|	|	/controllers
+|	|	|	index.php
+|	|	/models
+|	|	/plugins
+|	|	/tests
+|	|	/views
+|	|	|	/layouts
+|	|	|	|	master.html
+|	|	|	/partials
+|	|	|	/scripts
+|	|	|	|	/index
+|	|	|	|	|	index.html
+|	|	app.php
+|	|	routes.php
+|	/public
+|	init.php
+
+
+For quick and easy install:
+
+php composer.phar create-project pinguinio/puffin-bootstrap .
