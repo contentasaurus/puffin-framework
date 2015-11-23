@@ -145,8 +145,11 @@ class view
 		}
 	}
 
-	public static function render_json( $json = '' )
+	public static function render_json( $json = '', $response_code = '' )
 	{
+		if ($response_code != '') {
+			http_response_code($response_code);
+		}
 		header('Content-Type: application/json');
 		echo json_encode($json);
 		exit;
