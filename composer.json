@@ -1,5 +1,7 @@
 {
   "name": "pinguinio/puffin-framework",
+  "description": "A nice MVC framework utilizing mustache",
+  "license": "MIT",
   "require": {
 	"mustache/mustache": "~2.7",
 	"phroute/phroute" :  "~2.0"
