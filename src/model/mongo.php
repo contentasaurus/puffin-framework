@@ -69,7 +69,7 @@ class mongo
 	{
 		if( $id )
 		{
-			return $this->collection()->findOne( [ '_id' => new \MongoId($id) ]);
+			return $this->collection()->findOne( [ '_id' => create_id($id) ]);
 		}
 		else
 		{
@@ -148,6 +148,14 @@ class mongo
 		$array['created_at'] = $array['updated_at'] = $this->timestamp();
 		$array['is_archived'] = false;
 		return $array;
+	}
+
+	public function create_id($id) {
+		try {
+			return new \MongoId($id);
+		} catch (\MongoException $ex) {
+			return false;
+		}
 	}
 
 
