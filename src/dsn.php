@@ -118,6 +118,11 @@ class dsn
 
 		extract($connection_info);
 
+		if( !isset($authdb) && empty($authdb) )
+		{
+			$authdb = 'admin';
+		}
+
 		if( !isset($port) && empty($port) )
 		{
 			$port = 27017;
@@ -125,13 +130,14 @@ class dsn
 
 		return new \MongoClient
 		(
-			"mongodb://$addr:$port;",
-			[
-				'username' => $user,
-				'password' => $pass,
-				'db' => $name
-			]
+				"mongodb://$addr:$port;",
+				[
+						'username' => $user,
+						'password' => $pass,
+						'db' => $authdb
+				]
 		);
+
 	}
 
 	public static function register_all()
