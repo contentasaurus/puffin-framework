@@ -119,8 +119,41 @@ class mongo
 				}
 				else
 				{
-					$fill_array[ $key ] = $input[ $key ];
+
+					if ($value['array']) {
+
+						if ($value['id']) {
+							$input_array = array ();
+
+							foreach ($input[ $key ] as $array_value) {
+								array_push ($input_array, $this->create_id ($array_value));
+
+							}
+
+							$fill_array[ $key ] = $input_array;
+
+						} else {
+
+							$fill_array[ $key ] = $input[ $key ];
+
+						}
+
+					} else {
+
+						if ($value['id']) {
+
+							$fill_array[ $key ] = $this->create_id($input[ $key ]);
+
+						} else {
+
+							$fill_array[ $key] = $input[ $key ];
+
+						}
+
+					}
+
 				}
+
 			}
 
 			return $this->add_data($fill_array);
