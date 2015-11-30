@@ -118,24 +118,33 @@ class dsn
 
 		extract($connection_info);
 
-		if( !isset($authdb) && empty($authdb) )
-		{
-			$authdb = 'admin';
+		$dbparams = array();
+
+		if( isset($user) && !empty($user) ) {
+
+			$dbparams['username'] = $user;
+			$dbparams['password'] = $pass;
+
 		}
 
-		if( !isset($port) && empty($port) )
-		{
+		if( isset($authdb) && !empty($authdb) ) {
+
+			$dbparams['db'] = $authdb;
+
+		} else {
+
+			$dbparams['db'] = 'admin';
+		}
+
+		if( !isset($port) && empty($port) ) {
+
 			$port = 27017;
+
 		}
 
 		return new \MongoClient
 		(
-				"mongodb://$addr:$port;",
-				[
-						'username' => $user,
-						'password' => $pass,
-						'db' => $authdb
-				]
+				"mongodb://$addr:$port;", $dbparams
 		);
 
 	}
