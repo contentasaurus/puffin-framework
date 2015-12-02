@@ -96,7 +96,8 @@ class mongo
 		return false;
 	}
 
-	public function push ($id, $subdocument, $data) {
+	public function push ($id, $subdocument, $data)
+	{
 
 		return $this->collection()->update(["_id" => $this->create_id($id)], ['$push' => [$subdocument => $data]]);
 
@@ -121,36 +122,50 @@ class mongo
 			{
 				if( is_null( $input[$key] ) )
 				{
+
 					$fill_array[ $key ] = $value[ 'default' ];
+
 				}
 				else
 				{
 
-					if ($value['array']) {
+					if ($value['array'])
+					{
 
-						if ($value['id']) {
+						if ($value['id'])
+						{
+
 							$input_array = array ();
 
-							foreach ($input[ $key ] as $array_value) {
+							foreach ($input[ $key ] as $array_value)
+							{
+
 								array_push ($input_array, $this->create_id ($array_value));
 
 							}
 
 							$fill_array[ $key ] = $input_array;
 
-						} else {
+						}
+						else
+						{
 
 							$fill_array[ $key ] = $input[ $key ];
 
 						}
 
-					} else {
+					}
+					else
+					{
 
-						if ($value['id']) {
+						if ($value['id'])
+						{
 
 							$fill_array[ $key ] = $this->create_id($input[ $key ]);
 
-						} else {
+						}
+						else
+						{
 
 							$fill_array[ $key] = $input[ $key ];
 

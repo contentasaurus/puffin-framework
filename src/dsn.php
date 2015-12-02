@@ -120,32 +120,34 @@ class dsn
 
 		$dbparams = array();
 
-		if( isset($user) && !empty($user) ) {
+		if( isset($user) && !empty($user) )
+		{
 
 			$dbparams['username'] = $user;
 			$dbparams['password'] = $pass;
 
 		}
 
-		if( !isset($authdb) && empty($authdb) ) {
+		if( !isset($authdb) && empty($authdb) )
+		{
 
 			$dbparams['db'] = 'admin';
 
-		} else {
+		}
+		else
+		{
 
 			$dbparams['db'] = $authdb;
 		}
 
-		if( !isset($port) && empty($port) ) {
+		if( !isset($port) && empty($port) )
+		{
 
 			$port = 27017;
 
 		}
 
-		return new \MongoClient
-		(
-				"mongodb://$addr:$port;", $dbparams
-		);
+		return new \MongoClient("mongodb://$addr:$port;", $dbparams);
 
 	}
 
