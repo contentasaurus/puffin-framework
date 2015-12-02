@@ -127,13 +127,13 @@ class dsn
 
 		}
 
-		if( isset($authdb) && !empty($authdb) ) {
+		if( !isset($authdb) && empty($authdb) ) {
 
-			$dbparams['db'] = $authdb;
+			$dbparams['db'] = 'admin';
 
 		} else {
 
-			$dbparams['db'] = 'admin';
+			$dbparams['db'] = $authdb;
 		}
 
 		if( !isset($port) && empty($port) ) {

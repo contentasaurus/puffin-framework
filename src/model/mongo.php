@@ -69,7 +69,7 @@ class mongo
 	{
 		if( $id )
 		{
-			return $this->collection()->findOne( [ '_id' => create_id($id) ]);
+			return $this->collection()->findOne( [ '_id' => $this->create_id($id) ]);
 		}
 		else
 		{
@@ -96,9 +96,15 @@ class mongo
 		return false;
 	}
 
-	public function delete( $id )
+	public function push ($id, $subdocument, $data) {
+
+		return $this->collection()->update(["_id" => $this->create_id($id)], ['$push' => [$subdocument => $data]]);
+
+	}
+
+	public function pull ( $id, $subdocument, $data )
 	{
-		return $this->update($id, ['is_archived' => true]);
+		return $this->collection()->update(["_id" => $this->create_id($id)], ['$pull' => [$subdocument => $data]]);
 	}
 
 	#======================================================================
