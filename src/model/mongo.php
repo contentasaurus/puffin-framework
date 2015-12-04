@@ -99,13 +99,31 @@ class mongo
 	public function push ($id, $subdocument, $data)
 	{
 
-		return $this->collection()->update(["_id" => $this->create_id($id)], ['$push' => [$subdocument => $data]]);
+		//return $this->find_in_subdocument($id, $subdocument, $data); die();
+
+		if (count($this->find_in_subdocument($id, $subdocument, $data)) == 0) {
+			return $this->collection()->update(["_id" => $this->create_id($id)], ['$push' => [$subdocument => $data]]);
+		}
+
+		return false;
 
 	}
 
 	public function pull ( $id, $subdocument, $data )
 	{
-		return $this->collection()->update(["_id" => $this->create_id($id)], ['$pull' => [$subdocument => $data]]);
+
+		if (count($this->find_in_subdocument($id, $subdocument, $data)) != 0) {
+			return $this->collection()->update(["_id" => $this->create_id($id)], ['$pull' => [$subdocument => $data]]);
+		}
+
+		return false;
+
+	}
+
+	public function find_in_subdocument ($id, $subdocument, $data) {
+
+		return $this->collection()->findOne(['$and' => [["_id" => $this->create_id($id)], [$subdocument => $data]]]);
+
 	}
 
 	#======================================================================
@@ -205,11 +223,28 @@ class mongo
 	}
 
 	public function create_id($id) {
-		try {
-			return new \MongoId($id);
-		} catch (\MongoException $ex) {
-			return false;
+
+		// Check to see if already MongoId object
+		if ($id->{'$id'} != '') {
+
+			return $id;
+
+		} else {
+			try {
+				$mongo_id = new \MongoId($id);
+			} catch (\MongoException $ex) {
+				return false;
+			}
+
+			// Verify output object string = original input
+			if ($id = $mongo_id->{'$id'}) {
+				return $mongo_id;
+			}
+
 		}
+
+		return false;
+
 	}
 
 
