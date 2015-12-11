@@ -130,13 +130,17 @@ class mongo
 	# /CRUD
 	#======================================================================
 
-	public function fill( $input )
+	public function fill( $input, $parameters = null, $timestamp = true )
 	{
 		$fill_array = [];
 
-		if( $this->validate($input) )
+		if ($parameters == null) {
+			$parameters = $this->params;
+		}
+
+		if( $this->validate($input, $parameters) )
 		{
-			foreach( $this->params as $key => $value )
+			foreach( $parameters as $key => $value )
 			{
 				if( is_null( $input[$key] ) )
 				{
@@ -195,7 +199,11 @@ class mongo
 
 			}
 
-			return $this->add_data($fill_array);
+			if ($timestamp) {
+				return $this->add_data ($fill_array);
+			} else {
+				return $fill_array;
+			}
 
 		}
 
