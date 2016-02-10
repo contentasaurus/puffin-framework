@@ -1,7 +1,6 @@
 <?php
 
 namespace puffin;
-use \PDO as PDO;
 
 define("DEFAULT_DSN", 'default');
 
