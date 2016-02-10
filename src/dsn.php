@@ -111,7 +111,7 @@ class dsn
 			$dsn .= "unix_socket=$socket";
 		}
 
-		return new PDO( $dsn, $user, $pass );
+		return new \PDO( $dsn, $user, $pass );
 	}
 
 	public static function initialize_mongo( $connection_info )
