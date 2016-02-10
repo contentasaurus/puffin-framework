@@ -1,6 +1,5 @@
 <?php
 namespace puffin\model;
-use \PDO as PDO;
 use puffin\dsn as dsn;
 
 class pdo
@@ -84,7 +83,7 @@ class pdo
 
 		$statement = $this->_query_( $template, $query_params );
 
-		return $statement->fetchAll( PDO::FETCH_ASSOC );
+		return $statement->fetchAll( \PDO::FETCH_ASSOC );
 	}
 
 	public function select_raw( $request, $query_params = array() )
