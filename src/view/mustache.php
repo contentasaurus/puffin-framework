@@ -34,7 +34,7 @@ class mustache
 	{
 		\Mustache_Autoloader::register();
 
-		$this->$engine = new \Mustache_Engine
+		$this->engine = new \Mustache_Engine
 		(
 			[
 				'pragmas' => [\Mustache_Engine::PRAGMA_BLOCKS],
@@ -56,8 +56,8 @@ class mustache
 	{
 		if( !empty($title) )
 		{
-			$this->$title = $title;
-			$this->$title_template = '{{$ TITLE }}'. $title .'{{/ TITLE }}';
+			$this->title = $title;
+			$this->title_template = '{{$ TITLE }}'. $title .'{{/ TITLE }}';
 		}
 	}
 
@@ -65,13 +65,13 @@ class mustache
 	{
 		if( empty($new_template) )
 		{
-			return $this->$template;
+			return $this->template;
 		}
 		else
 		{
 			$path = SCRIPT_PATH . "/$new_template" . MUSTACHE_EXT;
-			$this->$template = $new_template;
-			$this->$template_template = '{{$ CONTENTS }}' . file_get_contents( $path ) . '{{/ CONTENTS }}';
+			$this->template = $new_template;
+			$this->template_template = '{{$ CONTENTS }}' . file_get_contents( $path ) . '{{/ CONTENTS }}';
 		}
 	}
 
@@ -79,13 +79,13 @@ class mustache
 	{
 		if( empty($new_layout) )
 		{
-			return $this->$layout;
+			return $this->layout;
 		}
 		else
 		{
 			$path = LAYOUT_PATH . "/$new_layout" . MUSTACHE_EXT;
-			$this->$layout = $new_layout;
-			$this->$layout_template = file_get_contents( $path );
+			$this->layout = $new_layout;
+			$this->layout_template = file_get_contents( $path );
 		}
 	}
 
@@ -95,7 +95,7 @@ class mustache
 		$temp['media'] = $media;
 		$temp['condition'] = $condition;
 
-		$this->$css []= $temp;
+		$this->css []= $temp;
 
 		$this->prepare_css();
 	}
@@ -104,7 +104,7 @@ class mustache
 	{
 		$css_string = '';
 
-		foreach( $this->$css as $stylesheet )
+		foreach( $this->css as $stylesheet )
 		{
 			if( $stylesheet['condition'] )
 			{
@@ -117,7 +117,7 @@ class mustache
 			}
 		}
 
-		$this->$css_template = '{{$ CSS }}' . $css_string . '{{/ CSS }}';
+		$this->css_template = '{{$ CSS }}' . $css_string . '{{/ CSS }}';
 	}
 
 	#######################
@@ -126,11 +126,11 @@ class mustache
 	{
 		if( $nonblocking )
 		{
-			$this->$nonblocking_js []= '<script type="text/javascript" src="'.$path.'"></script>' . chr(10) . chr(13);
+			$this->nonblocking_js []= '<script type="text/javascript" src="'.$path.'"></script>' . chr(10) . chr(13);
 		}
 		else
 		{
-			$this->$js []= '<script type="text/javascript" src="'.$path.'"></script>' . chr(10) . chr(13);
+			$this->js []= '<script type="text/javascript" src="'.$path.'"></script>' . chr(10) . chr(13);
 		}
 
 		$this->prepare_js( $nonblocking );
@@ -140,11 +140,11 @@ class mustache
 	{
 		if( $nonblocking )
 		{
-			$this->$nonblocking_js_template = '{{$ NONBLOCKING_JS }}' . implode($this->$nonblocking_js, '') . '{{/ NONBLOCKING_JS }}';
+			$this->nonblocking_js_template = '{{$ NONBLOCKING_JS }}' . implode($this->nonblocking_js, '') . '{{/ NONBLOCKING_JS }}';
 		}
 		else
 		{
-			$this->$js_template = '{{$ JS }}'. implode($this->$js, '') . '{{/ JS }}';
+			$this->js_template = '{{$ JS }}'. implode($this->js, '') . '{{/ JS }}';
 		}
 	}
 
@@ -159,7 +159,7 @@ class mustache
 	{
 		if( !is_numeric($key) )
 		{
-			$this->$params[$key] = $value;
+			$this->params[$key] = $value;
 		}
 	}
 
@@ -176,22 +176,22 @@ class mustache
 
 	public function prepare()
 	{
-		$layout = $this->$layout;
+		$layout = $this->layout;
 		$prepared_template = "{{% BLOCKS }}{{< $layout }}"
-							. $this->$title_template
-							. $this->$css_template
-							. $this->$js_template
-							. $this->$template_template
-							. $this->$nonblocking_js_template
+							. $this->title_template
+							. $this->css_template
+							. $this->js_template
+							. $this->template_template
+							. $this->nonblocking_js_template
 							. "{{/ $layout }}";
 
-		app::$template = $prepared_template;
+		$this->template = $prepared_template;
 	}
 
 	public function render()
 	{
 		$this->prepare();
-		$this->$engine->render( $this->$template, view::$params );
+		return $this->engine->render( $this->template, $this->params );
 	}
 
 

@@ -25,6 +25,6 @@ class json
 		}
 
 		header('Content-Type: application/json', $replace=true, $response_code);
-		echo json_encode($json);
+		return json_encode($json);
 	}
 }
