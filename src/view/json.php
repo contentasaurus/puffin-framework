@@ -3,12 +3,17 @@ namespace puffin\view;
 
 class json
 {
-	public static function init()
+	public function __construct()
 	{
-		return self;
+		$this->init();
 	}
 
-	public static function render( $json = '', $response_code = '' )
+	public function init()
+	{
+		return $this;
+	}
+
+	public function render( $json = '', $response_code = '' )
 	{
 		if( !empty($response_code) )
 		{

@@ -3,33 +3,38 @@ namespace puffin\view;
 
 class mustache
 {
-	public static $engine = false;
+	public $engine = false;
 
-	public static $params = [];
+	public $params = [];
 
-	public static $title = '';
-	public static $title_template = '';
+	public $title = '';
+	public $title_template = '';
 
-	public static $css = [];
-	public static $css_template = '';
+	public $css = [];
+	public $css_template = '';
 
-	public static $js = [];
-	public static $js_template = '';
+	public $js = [];
+	public $js_template = '';
 
-	public static $nonblocking_js = [];
-	public static $nonblocking_js_template = '';
+	public $nonblocking_js = [];
+	public $nonblocking_js_template = '';
 
-	public static $template = '';
-	public static $template_template = '';
+	public $template = '';
+	public $template_template = '';
 
-	public static $layout = '';
-	public static $layout_template = '';
+	public $layout = '';
+	public $layout_template = '';
 
-	public static function init()
+	public function __construct()
+	{
+		$this->init();
+	}
+
+	public function init()
 	{
 		\Mustache_Autoloader::register();
 
-		self::$engine = new \Mustache_Engine
+		$this->$engine = new \Mustache_Engine
 		(
 			[
 				'pragmas' => [\Mustache_Engine::PRAGMA_BLOCKS],
@@ -44,62 +49,62 @@ class mustache
 			]
 		);
 
-		return self;
+		return $this;
 	}
 
-	public static function title( $title = '' )
+	public function title( $title = '' )
 	{
 		if( !empty($title) )
 		{
-			self::$title = $title;
-			self::$title_template = '{{$ TITLE }}'. $title .'{{/ TITLE }}';
+			$this->$title = $title;
+			$this->$title_template = '{{$ TITLE }}'. $title .'{{/ TITLE }}';
 		}
 	}
 
-	public static function template( $new_template = '' )
+	public function template( $new_template = '' )
 	{
 		if( empty($new_template) )
 		{
-			return self::$template;
+			return $this->$template;
 		}
 		else
 		{
 			$path = SCRIPT_PATH . "/$new_template" . MUSTACHE_EXT;
-			self::$template = $new_template;
-			self::$template_template = '{{$ CONTENTS }}' . file_get_contents( $path ) . '{{/ CONTENTS }}';
+			$this->$template = $new_template;
+			$this->$template_template = '{{$ CONTENTS }}' . file_get_contents( $path ) . '{{/ CONTENTS }}';
 		}
 	}
 
-	public static function layout( $new_layout = '' )
+	public function layout( $new_layout = '' )
 	{
 		if( empty($new_layout) )
 		{
-			return self::$layout;
+			return $this->$layout;
 		}
 		else
 		{
 			$path = LAYOUT_PATH . "/$new_layout" . MUSTACHE_EXT;
-			self::$layout = $new_layout;
-			self::$layout_template = file_get_contents( $path );
+			$this->$layout = $new_layout;
+			$this->$layout_template = file_get_contents( $path );
 		}
 	}
 
-	public static function add_css( $path, $media='all', $condition=false )
+	public function add_css( $path, $media='all', $condition=false )
 	{
 		$temp['src'] = $path;
 		$temp['media'] = $media;
 		$temp['condition'] = $condition;
 
-		self::$css []= $temp;
+		$this->$css []= $temp;
 
-		self::prepare_css();
+		$this->prepare_css();
 	}
 
-	public static function prepare_css()
+	public function prepare_css()
 	{
 		$css_string = '';
 
-		foreach( self::$css as $stylesheet )
+		foreach( $this->$css as $stylesheet )
 		{
 			if( $stylesheet['condition'] )
 			{
@@ -112,81 +117,81 @@ class mustache
 			}
 		}
 
-		self::$css_template = '{{$ CSS }}' . $css_string . '{{/ CSS }}';
+		$this->$css_template = '{{$ CSS }}' . $css_string . '{{/ CSS }}';
 	}
 
 	#######################
 
-	public static function add_js( $path, $nonblocking = false )
+	public function add_js( $path, $nonblocking = false )
 	{
 		if( $nonblocking )
 		{
-			self::$nonblocking_js []= '<script type="text/javascript" src="'.$path.'"></script>' . chr(10) . chr(13);
+			$this->$nonblocking_js []= '<script type="text/javascript" src="'.$path.'"></script>' . chr(10) . chr(13);
 		}
 		else
 		{
-			self::$js []= '<script type="text/javascript" src="'.$path.'"></script>' . chr(10) . chr(13);
+			$this->$js []= '<script type="text/javascript" src="'.$path.'"></script>' . chr(10) . chr(13);
 		}
 
-		self::prepare_js( $nonblocking );
+		$this->prepare_js( $nonblocking );
 	}
 
-	public static function prepare_js( $nonblocking )
+	public function prepare_js( $nonblocking )
 	{
 		if( $nonblocking )
 		{
-			self::$nonblocking_js_template = '{{$ NONBLOCKING_JS }}' . implode(self::$nonblocking_js, '') . '{{/ NONBLOCKING_JS }}';
+			$this->$nonblocking_js_template = '{{$ NONBLOCKING_JS }}' . implode($this->$nonblocking_js, '') . '{{/ NONBLOCKING_JS }}';
 		}
 		else
 		{
-			self::$js_template = '{{$ JS }}'. implode(self::$js, '') . '{{/ JS }}';
+			$this->$js_template = '{{$ JS }}'. implode($this->$js, '') . '{{/ JS }}';
 		}
 	}
 
-	public static function prepare_nonblocking_js()
+	public function prepare_nonblocking_js()
 	{
 
 	}
 
 	#######################
 
-	public static function add_param( $key, $value )
+	public function add_param( $key, $value )
 	{
 		if( !is_numeric($key) )
 		{
-			self::$params[$key] = $value;
+			$this->$params[$key] = $value;
 		}
 	}
 
-	public static function add_params( $array )
+	public function add_params( $array )
 	{
 		if( is_array( $array ) )
 		{
 			foreach( $array as $k=>$v )
 			{
-				self::add_param( $k, $v );
+				$this->add_param( $k, $v );
 			}
 		}
 	}
 
-	public static function prepare()
+	public function prepare()
 	{
-		$layout = self::$layout;
+		$layout = $this->$layout;
 		$prepared_template = "{{% BLOCKS }}{{< $layout }}"
-							. self::$title_template
-							. self::$css_template
-							. self::$js_template
-							. self::$template_template
-							. self::$nonblocking_js_template
+							. $this->$title_template
+							. $this->$css_template
+							. $this->$js_template
+							. $this->$template_template
+							. $this->$nonblocking_js_template
 							. "{{/ $layout }}";
 
 		app::$template = $prepared_template;
 	}
 
-	public static function render()
+	public function render()
 	{
-		view::prepare();
-		self::$engine->render( self::$template, view::$params );
+		$this->prepare();
+		$this->$engine->render( $this->$template, view::$params );
 	}
 
 
