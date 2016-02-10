@@ -1,5 +1,6 @@
 <?php
 namespace puffin\model;
+use \PDO as PDO;
 
 class pdo
 {

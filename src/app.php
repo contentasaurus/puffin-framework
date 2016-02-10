@@ -5,7 +5,7 @@ use \Phroute\Phroute\Dispatcher as Dispatcher;
 
 class app
 {
-    public static $router;
+    public static $router = false;
     public static $presenter;
     public static $template;
     public static $presenter_template;
@@ -23,6 +23,10 @@ class app
 
     public static function router()
     {
+		if( !self::$router )
+		{
+			self::init_router();
+		}
         return self::$router;
     }
 
@@ -55,8 +59,7 @@ class app
 
     public static function render()
     {
-        view::prepare();
-        return self::$presenter->render( self::$template, view::$params );
+        return view::render();
     }
 
 
