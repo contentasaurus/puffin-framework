@@ -3,6 +3,9 @@ namespace puffin\view;
 
 class json
 {
+	public $template = '';
+	public $response_code = '';
+
 	public function __construct()
 	{
 		$this->init();
@@ -13,18 +16,35 @@ class json
 		return $this;
 	}
 
-	public function render( $json = '', $response_code = '' )
+	public function template( $new_template = '' )
 	{
-		if( !empty($response_code) )
+		if( empty($new_template) )
 		{
-			http_response_code($response_code);
+			return $this->template;
 		}
 		else
 		{
-			$response_code = http_response_code();
+			$this->template = $new_template;
+		}
+	}
+
+	public function set_response_code( $response_code )
+	{
+		$this->$response_code = $response_code;
+	}
+
+	public function render()
+	{
+		if( !empty($this->response_code) )
+		{
+			http_response_code($this->response_code);
+		}
+		else
+		{
+			$this->set_response_code( http_response_code() );
 		}
 
-		header('Content-Type: application/json', $replace=true, $response_code);
-		return json_encode($json);
+		header('Content-Type: application/json', $replace=true, $this->response_code);
+		return json_encode($this->template);
 	}
 }

@@ -1,6 +1,7 @@
 <?php
 namespace puffin\model;
 use \PDO as PDO;
+use puffin\dsn as dsn;
 
 class pdo
 {
@@ -50,7 +51,7 @@ class pdo
 
 	public function read( $id = false )
 	{
-		if( is_int($id) )
+		if( is_numeric($id) )
 		{
 			return  $this->selectRow( array("select * from {$this->table} where id = :id" , array(':id' => $id) ) );
 		}
@@ -137,7 +138,7 @@ class pdo
 
 	public function delete( $id )
 	{
-		if( is_int( $id ) )
+		if( is_numeric( $id ) )
 		{
 			return $this->execute( array("delete from {$this->table} where id = :id" , array(':id' => $id) ) );
 		}
@@ -165,7 +166,7 @@ class pdo
 
 	private function connect()
 	{
-		return \puffin\dsn::get( $this->connection );
+		return dsn::get( $this->connection );
 	}
 
 	private function _query_( $template, $query_params = array() )
