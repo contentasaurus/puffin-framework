@@ -5,6 +5,7 @@ class json
 {
 	public $template = '';
 	public $response_code = '';
+	public $params = [];
 
 	public function __construct()
 	{
@@ -28,6 +29,19 @@ class json
 		}
 	}
 
+	public function add_param( $key, $value )
+	{
+		$this->params[$key] = $value;
+	}
+
+	public function add_params( $params )
+	{
+		foreach( $params as $k => $v )
+		{
+			$this->add_param( $k, $v );
+		}
+	}
+
 	public function set_response_code( $response_code )
 	{
 		$this->$response_code = $response_code;
@@ -44,7 +58,8 @@ class json
 			$this->set_response_code( http_response_code() );
 		}
 
-		header('Content-Type: application/json', $replace=true, $this->response_code);
-		return json_encode($this->template);
+		header('Content-Type: application/json');
+		echo json_encode($this->params);
+		exit;
 	}
 }
