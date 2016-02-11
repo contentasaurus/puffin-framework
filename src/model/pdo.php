@@ -52,17 +52,17 @@ class pdo
 	{
 		if( is_numeric($id) )
 		{
-			return  $this->selectRow( array("select * from {$this->table} where id = :id" , array(':id' => $id) ) );
+			return  $this->select_row( "select * from {$this->table} where id = :id" , [ ':id' => $id ] );
 		}
 		else
 		{
-			return  $this->select("select * from {$this->table}");
+			return  $this->select( "select * from {$this->table}" );
 		}
 	}
 
 	public function read_ordered( $column = 'id', $direction = 'asc' )
 	{
-		return  $this->select("select * from {$this->table} order by $column $direction");
+		return  $this->select( "select * from {$this->table} order by $column $direction" );
 	}
 
 	#======================================================================
@@ -130,7 +130,7 @@ class pdo
 
 			$values[":id"] = $id;
 
-			return $this->execute( array( "UPDATE {$this->table} SET " . implode(',',$update_inputs) . " where `id` = :id" , $values ) );
+			return $this->execute( "UPDATE {$this->table} SET " . implode(',',$update_inputs) . " where `id` = :id" , $values );
 		}
 		return false;
 	}
@@ -139,7 +139,7 @@ class pdo
 	{
 		if( is_numeric( $id ) )
 		{
-			return $this->execute( array("delete from {$this->table} where id = :id" , array(':id' => $id) ) );
+			return $this->execute( "delete from {$this->table} where id = :id" , [ ':id' => $id ] );
 		}
 		return false;
 	}
