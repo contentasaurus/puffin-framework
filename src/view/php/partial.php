@@ -9,7 +9,14 @@ class partial
 
 	public function __construct( $path, $params )
 	{
-		$this->_path_ = PARTIAL_PATH . "/$path.php";
+		if( preg_match( "/^\/(.*)\.php$/", $path ) )
+		{
+			$this->_path_ = $path;
+		}
+		else
+		{
+			$this->_path_ = PARTIAL_PATH . "/$path.php";
+		}
 		$this->add_params($params);
 	}
 

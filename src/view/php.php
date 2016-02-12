@@ -39,7 +39,7 @@ class php
 		}
 		else
 		{
-			$this->_script_ = SCRIPT_PATH . "/$new_template.php";
+			$this->_script_ = SCRIPT_PATH . "/$new_script.php";
 		}
 	}
 
@@ -141,18 +141,19 @@ class php
 
 	public function prepare()
 	{
-		$p = new partial( $this->script, $this->_params_ );
+		$p = new partial( $this->_script_, $this->_params_ );
 
 		$this->TITLE = $this->_title_;
+		$this->META = '';
 		$this->CSS = $this->prepare_css();
 		$this->JS = $this->prepare_js( $nonblocking = false );
 		$this->CONTENTS = $p->render();
 		$this->NONBLOCKING_JS = $this->prepare_js( $nonblocking = true );
-		];
 	}
 
 	public function render()
 	{
+		$this->prepare();
 		$this->init_params();
 		ob_start();
 			include $this->layout();

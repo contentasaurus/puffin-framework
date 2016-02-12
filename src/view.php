@@ -12,6 +12,9 @@ class view
 			case 'json':
 				self::$engine = new view\json();
 				break;
+			case 'php':
+				self::$engine = new view\php();
+				break;
 			case 'mustache':
 			default:
 				self::$engine = new view\mustache();
