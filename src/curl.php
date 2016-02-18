@@ -18,10 +18,6 @@ class curl
 
 	protected $connect_timeout = 2;
 	protected $method = 'get';
-	protected $onComplete = '';
-	protected $onCreate = '';
-	protected $onFailure = '';
-	protected $onSuccess = '';
 	protected $params = '';
 	protected $timeout = 2;
 	protected $ssl_verify = true;

@@ -37,6 +37,7 @@ if (ERROR_REPORTING) {
 ############################################
 
 session::start();
+autoload::init();
 view::init('mustache');
 
 $app = app::init_router();
