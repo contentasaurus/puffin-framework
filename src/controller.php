@@ -18,9 +18,7 @@ class controller
 		}
 
 		self::$controller = $controller;
-		require_once CONTROLLER_PATH . "/$controller.php";
 		$controller_name = $controller.'_controller';
-
 		self::$controller_instance = new $controller_name;
 
 		self::$controller_instance->get = new param( $_GET );
