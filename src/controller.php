@@ -10,7 +10,7 @@ class controller
 	public static $controller_instance;
 	public static $controller;
 
-	public static function init( $controller, $arguments )
+	public static function init( $controller )
 	{
 		if( empty($controller) )
 		{
@@ -25,18 +25,10 @@ class controller
 		self::$controller_instance->post = new param( $_POST );
 		self::$controller_instance->input = file_get_contents('php://input');
 
-		if( is_array( $arguments ) )
-		{
-			foreach( $arguments as $k => $v )
-			{
-				self::$controller_instance->$k = $v;
-			}
-		}
-
 		plugin::run('__init');
 	}
 
-	public static function dispatch( $action )
+	public static function dispatch( $action, $args )
 	{
 		if( empty($action) ) { return ''; }
 
@@ -45,7 +37,7 @@ class controller
 
 		self::_set_template( self::$controller, $action );
 
-		$results = self::$controller_instance->$action();
+		$results = self::$controller_instance->$action( implode(',', $args) );
 
 		self::_run_after_call();
 		plugin::run('__after_call');

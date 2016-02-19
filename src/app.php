@@ -1,35 +1,43 @@
 <?php
 namespace puffin;
+use puffin\route as route;
 use \Phroute\Phroute\RouteCollector as RouteCollector;
 use \Phroute\Phroute\Dispatcher as Dispatcher;
 
 class app
 {
-    public static $router = false;
-    public static $presenter;
-    public static $template;
-    public static $presenter_template;
+	protected $routes = [];
 
-    public static function init_router()
-    {
-        return self::$router = new RouteCollector();
-    }
+	public $router = false;
+	public $presenter;
+	public $template;
+	public $presenter_template;
 
-    public static function router()
-    {
-		if( !self::$router )
+	public function router()
+	{
+		if( !$this->router )
 		{
-			self::init_router();
+			$this->init_router();
 		}
-        return self::$router;
-    }
+		return $this->router;
+	}
 
-    public static function route()
-    {
+	protected function init_router()
+	{
+		return $this->router = new RouteCollector();
+	}
+
+	public function controller( $controller_name )
+	{
+		return new route( $controller_name, $this );
+	}
+
+	public function route()
+	{
 		try
 		{
-			$dispatcher = new Dispatcher( self::router()->getData() );
-	        $results = $dispatcher->dispatch($_SERVER['REQUEST_METHOD'], parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
+			$dispatcher = new Dispatcher( $this->router()->getData() );
+			$results = $dispatcher->dispatch($_SERVER['REQUEST_METHOD'], parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));
 		}
 		catch( \Exception $e )
 		{
@@ -50,12 +58,12 @@ class app
 			}
 		}
 
-    }
+	}
 
-    public static function render()
-    {
-        return view::render();
-    }
+	public function render()
+	{
+		return view::render();
+	}
 
 
 }
