@@ -29,7 +29,7 @@ class app
 
 	public function controller( $controller_name )
 	{
-		return new route( $controller_name, $this );
+		return new route( $controller_name, $this->router() );
 	}
 
 	public function route()

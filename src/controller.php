@@ -37,7 +37,8 @@ class controller
 
 		self::_set_template( self::$controller, $action );
 
-		$results = self::$controller_instance->$action( implode(',', $args) );
+		$con = self::$controller_instance;
+		$results = call_user_func_array( [$con, $action] , $args);
 
 		self::_run_after_call();
 		plugin::run('__after_call');

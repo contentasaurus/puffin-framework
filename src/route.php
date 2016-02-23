@@ -6,7 +6,6 @@ class route
 {
 	public $app = false;
 	protected $controller_name;
-	protected $action;
 
 	public function __construct( $controller_name, &$app )
 	{
@@ -16,7 +15,7 @@ class route
 
 	public function __call( $func, $args )
 	{
-		list($route, $this->action) = $args;
+		list($route, $action) = $args;
 
 		switch( $func )
 		{
@@ -28,7 +27,11 @@ class route
 			case 'patch':
 			case 'delete':
 			case 'options':
-				$this->app->router()->$func( $route , [ $this, 'add_route' ] );
+				$handler = eval("return function(){
+					\puffin\controller::init( '{$this->controller_name}' );
+					\puffin\controller::dispatch( '$action', func_get_args() );
+				};");
+				$this->app->$func( $route , $handler );
 				break;
 
 			default:
@@ -36,12 +39,6 @@ class route
 		}
 
 		return $this;
-	}
-
-	public function add_route()
-	{
-		controller::init( $this->controller_name );
-		controller::dispatch( $this->action, func_get_args() );
 	}
 
 }
