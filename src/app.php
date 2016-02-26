@@ -13,6 +13,11 @@ class app
 	public $template;
 	public $presenter_template;
 
+	public function __construct()
+	{
+		transformer::_load();
+	}
+
 	public function router()
 	{
 		if( !$this->router )
