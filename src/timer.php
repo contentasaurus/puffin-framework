@@ -34,7 +34,7 @@ class timer
 		$duration = $last_marker['duration'];
 		$total_duration = $last_marker['total_duration'];
 
-		debug( "[$time] $comment (Time: $duration, Total Time: $total_duration)" );
+		return "[$time] $comment (Time: $duration, Total Time: $total_duration)";
 	}
 
 	public function get_timers()

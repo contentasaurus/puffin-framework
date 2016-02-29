@@ -9,7 +9,7 @@ class transformer
 	{
 		if( array_key_exists( $name, self::$library) )
 		{
-			return self::$library[$name]->$name( implode(',',$params) );
+			return call_user_func_array( [ self::$library[$name], $name ], $params );
 		}
 		else
 		{

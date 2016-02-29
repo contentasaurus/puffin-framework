@@ -1,6 +1,7 @@
 <?php
 namespace puffin;
 use puffin\route as route;
+use puffin\transformer as transformer;
 use \Phroute\Phroute\RouteCollector as RouteCollector;
 use \Phroute\Phroute\Dispatcher as Dispatcher;
 
@@ -49,15 +50,12 @@ class app
 			switch( get_class($e) )
 			{
 				case 'Phroute\Phroute\Exception\HttpRouteNotFoundException':
-					#debug('HttpRouteNotFoundException');
 					http_response_code(404);
 					break;
 				case 'Phroute\Phroute\Exception\HttpMethodNotAllowedException':
-					#debug('HttpMethodNotAllowedException');
 					http_response_code(403);
 					break;
 				default:
-					#debug($e);
 					http_response_code(400);
 					break;
 			}
