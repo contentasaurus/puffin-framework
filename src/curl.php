@@ -23,6 +23,7 @@ class curl
 	protected $ssl_verify = true;
 	protected $get_response = true;
 	protected $url = '';
+	protected $headers = [];
 
 
 	public function __construct( $options = [] )
@@ -30,6 +31,14 @@ class curl
 		foreach( $options as $key => $value )
 		{
 			$this->$key = $value;
+		}
+	}
+
+	public function set_headers( $headers )
+	{
+		foreach( $headers as $header )
+		{
+			$this->headers []= $header;
 		}
 	}
 
@@ -41,44 +50,41 @@ class curl
 
 		$this->curl_handle = curl_init();
 
-		curl_setopt( $this->curl_handle, CURLOPT_TIMEOUT, $this->timeout );
-		curl_setopt( $this->curl_handle, CURLOPT_CONNECTTIMEOUT, $this->connect_timeout );
-		curl_setopt( $this->curl_handle, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT'] );
-		curl_setopt( $this->curl_handle, CURLOPT_RETURNTRANSFER, $this->get_response );
-		curl_setopt( $this->curl_handle, CURLOPT_SSL_VERIFYPEER, $this->ssl_verify );
-		curl_setopt( $this->curl_handle, CURLOPT_SSL_VERIFYHOST, $this->ssl_verify );
-		curl_setopt( $this->curl_handle, CURLOPT_HEADER, 0 );
-		curl_setopt( $this->curl_handle, CURLOPT_FRESH_CONNECT, 1 );
+		curl_setopt_array( $this->curl_handle, [
+			CURLOPT_TIMEOUT => $this->timeout,
+			CURLOPT_CONNECTTIMEOUT => $this->connect_timeout,
+			CURLOPT_USERAGENT => $_SERVER['HTTP_USER_AGENT'],
+			CURLOPT_RETURNTRANSFER => $this->get_response,
+			CURLOPT_SSL_VERIFYPEER => $this->ssl_verify,
+			CURLOPT_SSL_VERIFYHOST => $this->ssl_verify,
+			CURLOPT_HEADER => 0,
+			CURLOPT_FRESH_CONNECT => 1
+		]);
 
 		$params = ( is_array($params) ) ? http_build_query($params) : $params;
 
 		switch( $function )
 		{
 			case 'get':
-				curl_setopt( $this->curl_handle, CURLOPT_URL, "$url?$params" );
-				curl_setopt( $this->curl_handle, CURLOPT_HTTPGET, 1 );
+				curl_setopt_array( $this->curl_handle, [
+					CURLOPT_URL => "$url?$params",
+					CURLOPT_HTTPGET => 1,
+					CURLOPT_HTTPHEADER => $this->headers
+				]);
 				break;
 
 			case 'post':
-				curl_setopt( $this->curl_handle, CURLOPT_URL, $url );
-				curl_setopt( $this->curl_handle, CURLOPT_POST, 1 );
-				curl_setopt( $this->curl_handle, CURLOPT_POSTFIELDS, $params );
-				break;
-
 			case 'put':
-				curl_setopt( $this->curl_handle, CURLOPT_URL, $url );
-				curl_setopt( $this->curl_handle, CURLOPT_CUSTOMREQUEST, 'PUT' );
-				curl_setopt( $this->curl_handle, CURLOPT_RETURNTRANSFER, 1 );
-				curl_setopt( $this->curl_handle, CURLOPT_HTTPHEADER, array('Content-Length: ' . strlen($params)) );
-				curl_setopt( $this->curl_handle, CURLOPT_POSTFIELDS, $params );
-				break;
-
 			case 'delete':
-				curl_setopt( $this->curl_handle, CURLOPT_URL, $url );
-				curl_setopt( $this->curl_handle, CURLOPT_CUSTOMREQUEST, 'DELETE' );
-				curl_setopt( $this->curl_handle, CURLOPT_RETURNTRANSFER, 1 );
-				curl_setopt( $this->curl_handle, CURLOPT_HTTPHEADER, array('Content-Length: ' . strlen($params)) );
-				curl_setopt( $this->curl_handle, CURLOPT_POSTFIELDS, $params );
+				$this->set_headers(['Content-Length: ' . strlen($params)]);
+
+				curl_setopt_array( $this->curl_handle, [
+					CURLOPT_URL => $url,
+					CURLOPT_CUSTOMREQUEST => strtoupper($function),
+					CURLOPT_RETURNTRANSFER => 1,
+					CURLOPT_HTTPHEADER => $this->headers,
+					CURLOPT_POSTFIELDS => $params
+				]);
 				break;
 
 			default:
