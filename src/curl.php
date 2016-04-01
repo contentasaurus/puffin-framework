@@ -56,7 +56,7 @@ class curl
 			CURLOPT_USERAGENT => $_SERVER['HTTP_USER_AGENT'],
 			CURLOPT_RETURNTRANSFER => $this->get_response,
 			CURLOPT_SSL_VERIFYPEER => $this->ssl_verify,
-			CURLOPT_SSL_VERIFYHOST => $this->ssl_verify,
+			CURLOPT_SSL_VERIFYHOST => 2,
 			CURLOPT_HEADER => 0,
 			CURLOPT_FRESH_CONNECT => 1
 		]);
