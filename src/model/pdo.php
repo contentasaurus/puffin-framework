@@ -105,12 +105,14 @@ class pdo
 
 	public function select_row( $request, $query_params = array() )
 	{
-		return reset( $this->select( $request, $query_params ) );
+		$result = $this->select( $request, $query_params );
+		return reset( $result );
 	}
 
 	public function select_one( $request, $query_params = array() )
 	{
-		return reset( reset( $this->select( $request, $query_params ) ) );
+		$result = $this->select_row( $request, $query_params );
+		return reset( $result );
 	}
 
 	#----------------------------------------------------------------------

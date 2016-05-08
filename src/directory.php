@@ -102,6 +102,10 @@ class directory
 			$ignore_array = array( '.', '..' );
 			$return = array();
 			$contents = scandir( $path );
+			if( empty($contents) )
+			{
+				return false;
+			}
 			foreach( $contents as $fs_element )
 			{
 				if( !in_array( $fs_element, $ignore_array ) )

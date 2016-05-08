@@ -116,7 +116,7 @@ class php
 	{
 		if( !is_numeric($key) )
 		{
-			$this->$_params_[$key] = $value;
+			$this->_params_[$key] = $value;
 		}
 	}
 

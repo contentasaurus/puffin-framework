@@ -30,7 +30,7 @@ class session
 				'timestamp' => date('U'),
 				'request_method' => $_SERVER['REQUEST_METHOD'],
 				'url' => $_SERVER['REQUEST_URI'],
-				'querystring' => $_SERVER['QUERY_STRING'],
+				'querystring' => @$_SERVER['QUERY_STRING'],
 				'referrer' => @$_SERVER['HTTP_REFERER'],
 			);
 			if( count($_SESSION['tracking']) > self::$breadcrumbs )

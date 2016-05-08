@@ -10,7 +10,7 @@ define("DEFAULT_DSN", 'default');
 #	pdo:  	type, name, user, pass, addr, [port] (default = 3306), [socket]
 #	mongo:	type, name, user, pass, addr, [port] (default = 27017)
 #
-#	Dsn::set
+#	dsn::set
 #	(
 #		'default',
 #		array
@@ -27,10 +27,10 @@ define("DEFAULT_DSN", 'default');
 #	To get the database reference in the module or application code
 #	simply use the following static method
 #
-#	Dsn::get(); 			Returns the default DSN as
+#	dsn::get(); 			Returns the default DSN as
 #							defined in DEFAULT_DSN.
 #
-#	Dsn::get('default');	Returns the specified DSN, if
+#	dsn::get('default');	Returns the specified DSN, if
 #							it exists. Otherwise returns false.
 #
 

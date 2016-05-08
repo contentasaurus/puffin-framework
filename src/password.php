@@ -41,14 +41,15 @@ class password
 		$is_valid = $this->verify( $password, $password_hash );
 		$needs_rehash = $this->needs_rehash( $password_hash, self::PASSWORD_METHOD, $this->get_options() );
 
-		if ($is_valid === true)
+		if( $is_valid )
 		{
 			$result = self::SUCCESS;
 		}
 
-		if ($is_valid === true && $needs_rehash === true)
+		if( $is_valid && $needs_rehash )
 		{
-			$new_hash = $this->rehash( $password );
+			$new_hash = $this->make( $password );
+
 			if( $this->verify( $password, $new_hash ) )
 			{
 				$result = self::SUCCESS_PASSWORD_REHASHED;
@@ -60,23 +61,15 @@ class password
 
 	public function verify( $password, $password_hash )
 	{
-		if( password_verify( $password, $password_hash ) === true )
-		{
-			return self::SUCCESS;
-		}
-
-		return self::FAILURE;
+		return password_verify( $password, $password_hash );
 	}
 
 	public function needs_rehash( $password )
 	{
-		if( password_needs_rehash( $password_hash, self::PASSWORD_METHOD, $this->get_options() ) === true )
-		{
-			return $this->make( $password );
-		}
+		return password_needs_rehash( $password, self::PASSWORD_METHOD, $this->get_options() );
 	}
 
-	public function get_options( $id )
+	public function get_options( $id = '' )
 	{
 		if( !empty($id) )
 		{

@@ -7,7 +7,7 @@ class route
 	public $app = false;
 	protected $controller_name;
 
-	public function __construct( $controller_name, &$app )
+	public function __construct( $controller_name, $app )
 	{
 		$this->app = $app;
 		$this->controller_name = $controller_name;
