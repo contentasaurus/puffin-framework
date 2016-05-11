@@ -151,6 +151,12 @@ class php
 		$this->NONBLOCKING_JS = $this->prepare_js( $nonblocking = true );
 	}
 
+	public function partial( $script, $params = [] )
+	{
+		$p = new partial( $script, $params );
+		return $p->render();
+	}
+
 	public function render()
 	{
 		$this->prepare();

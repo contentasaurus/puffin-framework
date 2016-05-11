@@ -9,6 +9,7 @@ class controller
 
 	public static $controller_instance;
 	public static $controller;
+	public static $action;
 
 	public static function init( $controller )
 	{
@@ -25,11 +26,14 @@ class controller
 		self::$controller_instance->post = new param( $_POST );
 		self::$controller_instance->input = file_get_contents('php://input');
 
+		self::_run_init();
 		plugin::run('__init');
 	}
 
 	public static function dispatch( $action, $args )
 	{
+		self::$action = $action;
+
 		if( empty($action) ) { return ''; }
 
 		self::_run_before_call();
@@ -50,6 +54,11 @@ class controller
 	{
 		view::template("$controller/$action");
 		return true;
+	}
+
+	protected static function _run_init()
+	{
+		return self::$controller_instance->__init();
 	}
 
 	protected static function _run_before_call()

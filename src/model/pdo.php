@@ -6,7 +6,7 @@ class pdo
 {
 	public $db = false;
 	protected $connection = 'default';
-
+	protected $dynamic_columns = [];
 
 	public function __construct(){}
 
@@ -50,19 +50,45 @@ class pdo
 
 	public function read( $id = false )
 	{
+		$dyn_select = [];
+
+		$dyn = '';
+
+		if( !empty($this->dynamic_columns) )
+		{
+			foreach( $this->dynamic_columns as $column )
+			{
+				$dyn_select []= "column_json($column) as $column";
+			}
+
+			$dyn = ', ';
+		}
+
+		$dyn .= implode(', ', $dyn_select);
+
+		$query = 'select';
+		$sql = "select * $dyn from {$this->table}";
+		$params = [];
+
 		if( is_numeric($id) )
 		{
-			return  $this->select_row( "select * from {$this->table} where id = :id" , [ ':id' => $id ] );
+			$query = 'select_row';
+			$sql .= " where id = :id";
+			$params = [ ':id' => $id ];
 		}
-		else
-		{
-			return  $this->select( "select * from {$this->table}" );
-		}
+
+		return $this->$query( $sql, $params );
 	}
 
 	public function read_ordered( $column = 'id', $direction = 'asc' )
 	{
 		return  $this->select( "select * from {$this->table} order by $column $direction" );
+	}
+
+	public function read_dynamic( $id, $column )
+	{
+		$results = $this->select_one( "select column_json($column) as $column from {$this->table} where id = :id", [ ':id' => $id ] );
+		return json_decode( $results, $assoc = true );
 	}
 
 	#======================================================================

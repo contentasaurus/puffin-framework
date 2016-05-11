@@ -7,7 +7,7 @@ class partial
 	public $_params_ = [];
 	public $_contents_ = '';
 
-	public function __construct( $path, $params )
+	public function __construct( $path, $params = [] )
 	{
 		if( preg_match( "/^\/(.*)\.php$/", $path ) )
 		{
@@ -22,7 +22,7 @@ class partial
 
 	#######################
 
-	public function partial( $path, $params )
+	public function partial( $path, $params = [] )
 	{
 		$p = new partial( $path, $params );
 		return $p->render();
