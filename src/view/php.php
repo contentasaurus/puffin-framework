@@ -1,6 +1,8 @@
 <?php
 namespace puffin\view;
 
+use puffin\view\php\partial as partial;
+
 class php
 {
 	public $_params_ = [];

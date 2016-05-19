@@ -1,5 +1,5 @@
 <?php
-namespace puffin\view;
+namespace puffin\view\php;
 
 class partial
 {

@@ -22,8 +22,25 @@ class controller
 		$controller_name = $controller.'_controller';
 		self::$controller_instance = new $controller_name;
 
+		$_PUT = [];
+		$_DELETE = [];
+
 		self::$controller_instance->get = new param( $_GET );
 		self::$controller_instance->post = new param( $_POST );
+
+		if( strtoupper($_SERVER['REQUEST_METHOD']) == 'PUT' )
+		{
+			parse_str(file_get_contents('php://input'), $_PUT);
+		}
+
+		if( strtoupper($_SERVER['REQUEST_METHOD']) == 'DELETE' )
+		{
+			parse_str( file_get_contents('php://input'), $_DELETE );
+		}
+
+		self::$controller_instance->put = new param( $_PUT );
+		self::$controller_instance->delete = new param( $_DELETE );
+
 		self::$controller_instance->input = file_get_contents('php://input');
 
 		self::_run_init();

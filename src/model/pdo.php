@@ -24,14 +24,66 @@ class pdo
 	}
 
 	#======================================================================
+	# dynamic columns
+	#======================================================================
+
+	public function column_check( $id = false, $column = false )
+	{
+		$sql = "SELECT COLUMN_CHECK($column) FROM `{$this->table}` WHERE id = :id";
+		$params = [ ':id' => $id ];
+
+		return $this->select_one( $sql, $params );
+	}
+
+	public function column_create( $id = false, $column = false, $values = [] )
+	{
+		$sql_part = [];
+		foreach( $values as $k => $v )
+		{
+			$sql_part []= "'$k','$v'";
+		}
+
+		$kvs = implode(',',$sql_part);
+
+		$sql = "UPDATE `{$this->table}`
+				SET $column = column_create($kvs)
+				WHERE id = :id";
+		$params = [ ':id' => $id ];
+
+		return $this->execute( $sql, $params );
+	}
+
+	public function column_add( $id = false, $column = false, $values = [] )
+	{
+		if( !count($values) % 2 )
+		{
+			#only $values with even numbers of elements allowed
+			return false;
+		}
+
+		$sql_part = [];
+		foreach( $values as $k => $v )
+		{
+			$sql_part []= "$column = column_add($column, '$k', '$v' )";
+		}
+
+		$sql = "UPDATE `{$this->table}` SET " .
+				implode( ', ', $sql_parts ) .
+			   "WHERE id = :id";
+		$params = [ ':id' => $id ];
+
+		return $this->execute( $sql, $params );
+	}
+
+	#======================================================================
 	# Builders
 	#======================================================================
 
-	public function create( $inputs = array() )
+	public function create( $inputs = [] )
 	{
-		$columns = array();
-		$placeholders = array();
-		$values = array();
+		$columns = [];
+		$placeholders = [];
+		$values = [];
 
 		foreach( $inputs as $column => $value )
 		{
@@ -95,7 +147,7 @@ class pdo
 	# Interfaces
 	#======================================================================
 
-	public function select( $request, $query_params = array() )
+	public function select( $request, $query_params = [] )
 	{
 		if( is_array($request) )
 		{
@@ -112,7 +164,7 @@ class pdo
 		return $statement->fetchAll( \PDO::FETCH_ASSOC );
 	}
 
-	public function select_raw( $request, $query_params = array() )
+	public function select_raw( $request, $query_params = [] )
 	{
 		if( is_array($request) )
 		{
@@ -129,13 +181,13 @@ class pdo
 		return $statement;
 	}
 
-	public function select_row( $request, $query_params = array() )
+	public function select_row( $request, $query_params = [] )
 	{
 		$result = $this->select( $request, $query_params );
 		return reset( $result );
 	}
 
-	public function select_one( $request, $query_params = array() )
+	public function select_one( $request, $query_params = [] )
 	{
 		$result = $this->select_row( $request, $query_params );
 		return reset( $result );
@@ -143,12 +195,12 @@ class pdo
 
 	#----------------------------------------------------------------------
 
-	public function update( $id = false, $inputs = array() )
+	public function update( $id = false, $inputs = [] )
 	{
 		if( is_numeric($id) )
 		{
-			$update_inputs = array();
-			$values = array();
+			$update_inputs = [];
+			$values = [];
 
 			foreach( $inputs as $key => $value )
 			{
@@ -172,7 +224,7 @@ class pdo
 		return false;
 	}
 
-	public function execute( $request, $query_params = array() )
+	public function execute( $request, $query_params = [] )
 	{
 		if( is_array($request) )
 		{
@@ -196,7 +248,7 @@ class pdo
 		return dsn::get( $this->connection );
 	}
 
-	private function _query_( $template, $query_params = array() )
+	private function _query_( $template, $query_params = [] )
 	{
 		$this->db = $this->connect();
 
@@ -206,7 +258,7 @@ class pdo
 		return $statement;
 	}
 
-	private function _exec_( $template, $query_params = array() )
+	private function _exec_( $template, $query_params = [] )
 	{
 		$this->db = $this->connect();
 

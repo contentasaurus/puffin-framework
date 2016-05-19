@@ -31,7 +31,7 @@ class param
 		return $this->_get_param( $this->sanitized_array, $param, $default_value);
 	}
 
-	public function original_param( $param, $default_value )
+	public function original_param( $param, $default_value = false )
 	{
 		return $this->_get_param( $this->original_array, $param, $default_value);
 	}
