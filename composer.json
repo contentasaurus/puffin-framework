@@ -1,15 +1,16 @@
 {
-  "name": "pinguinio/puffin-framework",
-  "description": "A nice MVC framework utilizing mustache",
-  "license": "MIT",
-  "require": {
+	"name": "pinguinio/puffin-framework",
+	"description": "A nice MVC framework utilizing mustache",
+	"license": "MIT",
+	"require": {
 	"zordius/lightncandy": "dev-master",
 	"mustache/mustache": "~2.7",
-	"phroute/phroute" :  "~2.0"
-  },
-  "autoload": {
-    "psr-4":{
-      "puffin\\": "src/"
-    }
-  }
+	"phroute/phroute" :	"~2.0"
+	},
+	"autoload": {
+		"psr-4":{
+			"puffin\\": "src/"
+		}
+	},
+	"minimum-stability":"alpha"
 }
