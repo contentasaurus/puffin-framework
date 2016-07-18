@@ -3,6 +3,7 @@
   "description": "A nice MVC framework utilizing mustache",
   "license": "MIT",
   "require": {
+	"zordius/lightncandy": "dev-master",
 	"mustache/mustache": "~2.7",
 	"phroute/phroute" :  "~2.0"
   },
