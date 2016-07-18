@@ -2,7 +2,7 @@
 	"name": "pinguinio/puffin-framework",
 	"description": "A nice MVC framework, made by nice people.",
 	"license": "MIT",
-	"minimum-stability":"alpha",
+	"minimum-stability":"dev",
 	"require": {
 		"zordius/lightncandy": "dev-master",
 		"mustache/mustache": "~2.7",
