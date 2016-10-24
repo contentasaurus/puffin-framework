@@ -37,8 +37,15 @@ class environment
 
 	public static function unpack( $environment )
 	{
-		self::unpack_dsn($environment['dsn'] );
-		self::unpack_session($environment['session'] );
+		if(isset($environment['dsn']))
+		{
+			self::unpack_dsn($environment['dsn'] );
+		}
+		
+		if(isset($environment['session']))
+		{
+			self::unpack_session($environment['session'] );
+		}
 	}
 
 	private static function unpack_dsn( $DSNs )

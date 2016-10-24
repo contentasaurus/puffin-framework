@@ -13,6 +13,7 @@ class session
 
 	public static function start()
 	{
+		date_default_timezone_set('America/Chicago');
 		session_name( self::get_name() );
 		session_start();
 		self::$id = session_id();
