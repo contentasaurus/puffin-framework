@@ -1,12 +1,12 @@
 {
-	"name": "pinguinio/puffin-framework",
+	"name": "contentasaurus/puffin-framework",
 	"description": "A nice MVC framework, made by nice people.",
 	"license": "MIT",
 	"minimum-stability":"dev",
 	"require": {
-		"zordius/lightncandy": "dev-master",
+		"contentasaurus/lightncandy": "dev-master",
 		"mustache/mustache": "~2.7",
-		"phroute/phroute" :	"~2.0"
+		"phroute/phroute" : "~2.0"
 	},
 	"autoload": {
 		"psr-4":{
