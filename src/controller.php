@@ -27,6 +27,7 @@ class controller
 
 		self::$controller_instance->get = new param( $_GET );
 		self::$controller_instance->post = new param( $_POST );
+		self::$controller_instance->files = new param( $_FILES );
 
 		if( strtoupper($_SERVER['REQUEST_METHOD']) == 'PUT' )
 		{
