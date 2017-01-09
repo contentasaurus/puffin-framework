@@ -22,6 +22,17 @@ class view
 		}
 	}
 
+	public static function set_response_code($code){
+	    // this is a bit sloppy. Prob better to have some kind of 
+	    // a string or constant with the specific engine name to eval
+	    // against or figure some other way out of allowing you to set <thead>
+	    // the response code for json responses
+	    if(get_class(self::$engine) === view\json::class){
+		self::$engine->set_response_code( $code );
+	    }
+	}
+    
+
 	public static function title( $title = '' )
 	{
 		self::$engine->title( $title );

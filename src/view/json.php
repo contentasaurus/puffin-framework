@@ -44,14 +44,19 @@ class json
 
 	public function set_response_code( $response_code )
 	{
-		$this->$response_code = $response_code;
+		$this->response_code = $response_code;
 	}
+
+	public function get_response_code(){
+	    return $this->response_code;
+	}
+
 
 	public function render()
 	{
-		if( !empty($this->response_code) )
+		if( !empty($this->get_response_code()) )
 		{
-			http_response_code($this->response_code);
+			http_response_code($this->get_response_code());
 		}
 		else
 		{
