@@ -7,7 +7,7 @@ define("DEFAULT_DSN", 'default');
 #
 #	Different DB types have different requirements
 #
-#	pdo:  	type, name, user, pass, addr, [port] (default = 3306), [socket]
+#	pdo:  	type, name, user, pass, addr, [port] (default = 3306), [socket], [charset]
 #	mongo:	type, name, user, pass, addr, [port] (default = 27017)
 #
 #	dsn::set
@@ -20,6 +20,7 @@ define("DEFAULT_DSN", 'default');
 #			'user' => 'default_user',
 #			'pass' => 'default_password',
 #			'addr' => 'localhost'
+#			'charset' => 'utf8mb4'
 #		)
 #	);
 #
@@ -95,6 +96,15 @@ class dsn
 
 		$dsn = "$type:host=$addr;";
 
+		if( isset($charset) &&!empty($charset) )
+		{
+			$dsn .= "charset=$charset;";
+		}
+		else
+		{
+			$dsn .= "charset=utf8mb4;";
+		}
+
 		if( isset($name) &&!empty($name) )
 		{
 			$dsn .= "dbname=$name;";
@@ -107,7 +117,7 @@ class dsn
 
 		if( isset($socket) &&!empty($socket) )
 		{
-			$dsn .= "unix_socket=$socket";
+			$dsn .= "unix_socket=$socket;";
 		}
 
 		return new \PDO( $dsn, $user, $pass );
