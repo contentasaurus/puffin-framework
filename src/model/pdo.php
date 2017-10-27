@@ -87,7 +87,7 @@ class pdo
 
 		foreach( $inputs as $column => $value )
 		{
-			$columns []= $column;
+			$columns []= "`$column`";
 			$placeholders []= ":$column";
 			$values[":$column"] = $value;
 		}
