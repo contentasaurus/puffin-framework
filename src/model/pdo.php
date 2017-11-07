@@ -5,6 +5,7 @@ use puffin\dsn as dsn;
 class pdo
 {
 	public $db = false;
+	public $last_statement = null;
 	protected $connection = 'default';
 	protected $dynamic_columns = [];
 
@@ -253,6 +254,7 @@ class pdo
 		$this->db = $this->connect();
 
 		$statement = $this->db->prepare( $template );
+		$this->last_statement = $statement;
 		$statement->execute( $query_params );
 
 		return $statement;
@@ -263,6 +265,7 @@ class pdo
 		$this->db = $this->connect();
 
 		$statement = $this->db->prepare( $template );
+		$this->last_statement = $statement;
 		$statement->execute( $query_params );
 
 		return $statement->rowCount();
