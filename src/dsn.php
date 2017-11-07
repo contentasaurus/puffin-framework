@@ -120,7 +120,14 @@ class dsn
 			$dsn .= "unix_socket=$socket;";
 		}
 
-		return new \PDO( $dsn, $user, $pass );
+		try {
+			$pdo = new \PDO( $dsn, $user, $pass );
+		} catch (PDOException $e) {
+			debug($e->getMessage());
+			exit;
+		}
+
+		return $pdo;
 	}
 
 	public static function initialize_mongo( $connection_info )

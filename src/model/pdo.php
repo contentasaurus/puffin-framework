@@ -6,6 +6,7 @@ class pdo
 {
 	public $db = false;
 	protected $connection = 'default';
+	protected $last_statement = false;
 	protected $dynamic_columns = [];
 
 	public function __construct(){}
@@ -21,6 +22,11 @@ class pdo
 	public function insert_id()
 	{
 		return $this->db->lastInsertId();
+	}
+
+	public function get_last_statement()
+	{
+		return $this->last_statement;
 	}
 
 	#======================================================================
@@ -46,8 +52,8 @@ class pdo
 		$kvs = implode(',',$sql_part);
 
 		$sql = "UPDATE `{$this->table}`
-				SET $column = column_create($kvs)
-				WHERE id = :id";
+				SET `$column` = column_create($kvs)
+				WHERE `id` = :id";
 		$params = [ ':id' => $id ];
 
 		return $this->execute( $sql, $params );
@@ -134,12 +140,12 @@ class pdo
 
 	public function read_ordered( $column = 'id', $direction = 'asc' )
 	{
-		return  $this->select( "select * from {$this->table} order by $column $direction" );
+		return  $this->select( "select * from `{$this->table}` order by `$column` $direction" );
 	}
 
 	public function read_dynamic( $id, $column )
 	{
-		$results = $this->select_one( "select column_json($column) as $column from {$this->table} where id = :id", [ ':id' => $id ] );
+		$results = $this->select_one( "select column_json($column) as $column from {$this->table} where `id` = :id", [ ':id' => $id ] );
 		return json_decode( $results, $assoc = true );
 	}
 
@@ -161,7 +167,15 @@ class pdo
 
 		$statement = $this->_query_( $template, $query_params );
 
-		return $statement->fetchAll( \PDO::FETCH_ASSOC );
+		$results = [];
+		try {
+			$results = $statement->fetchAll( \PDO::FETCH_ASSOC );
+		} catch (PDOException $e) {
+			debug($e->getMessage());
+			exit;
+		}
+
+		return $results;
 	}
 
 	public function select_raw( $request, $query_params = [] )
@@ -210,7 +224,7 @@ class pdo
 
 			$values[":id"] = $id;
 
-			return $this->execute( "UPDATE {$this->table} SET " . implode(',',$update_inputs) . " where `id` = :id" , $values );
+			return $this->execute( "UPDATE `{$this->table}` SET " . implode(',',$update_inputs) . " WHERE `id` = :id" , $values );
 		}
 		return false;
 	}
@@ -219,7 +233,7 @@ class pdo
 	{
 		if( is_numeric( $id ) )
 		{
-			return $this->execute( "delete from {$this->table} where id = :id" , [ ':id' => $id ] );
+			return $this->execute( "DELETE FROM `{$this->table}` WHERE `id` = :id" , [ ':id' => $id ] );
 		}
 		return false;
 	}
@@ -248,24 +262,45 @@ class pdo
 		return dsn::get( $this->connection );
 	}
 
+	private function _exec_( $template, $query_params = [] )
+	{
+		$statement = $this->_query_( $template, $query_params );
+		return $statement->rowCount();
+	}
+
 	private function _query_( $template, $query_params = [] )
 	{
 		$this->db = $this->connect();
 
-		$statement = $this->db->prepare( $template );
-		$statement->execute( $query_params );
+		try {
+			$statement = $this->db->prepare( $template );
+		} catch (PDOException $e) {
+			debug($e->getMessage());
+			exit;
+		}
+
+		try {
+			$statement->execute( $query_params );
+		} catch (PDOException $e) {
+			debug($e->getMessage());
+			exit;
+		}
+
+		$this->last_statement = $statement;
+
+		if( $statement->errorCode() != '00000' )
+		{
+			$error_msg = $statement->errorInfo();
+			echo('<h1>Query Error: '.$error_msg[0].'</h1>');
+			echo('<h4>('.$error_msg[1].') '.$error_msg[2].'</h4>');
+			echo('<h5>Statement</h4>');
+			echo('<blockquote><code>'.nl2br($template).'</code></blockquote>');
+			echo('<h5>Params</h5>');
+			debug($query_params);
+			exit;
+		}
 
 		return $statement;
-	}
-
-	private function _exec_( $template, $query_params = [] )
-	{
-		$this->db = $this->connect();
-
-		$statement = $this->db->prepare( $template );
-		$statement->execute( $query_params );
-
-		return $statement->rowCount();
 	}
 
 }
