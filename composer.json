@@ -1,6 +1,6 @@
 {
 	"name": "contentasaurus/puffin-framework",
-	"description": "A nice MVC framework, made by nice people.",
+	"description": "A nice MVC framework, made by a nice person.",
 	"license": "MIT",
 	"minimum-stability":"dev",
 	"require": {
