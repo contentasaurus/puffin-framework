@@ -2,6 +2,11 @@
 namespace puffin\model;
 use puffin\dsn as dsn;
 
+if( !isset(DB_DEBUG_QUERY) )
+{
+	define('DB_DEBUG_QUERY', false);
+}
+
 class pdo
 {
 	public $db = false;
@@ -171,7 +176,14 @@ class pdo
 		try {
 			$results = $statement->fetchAll( \PDO::FETCH_ASSOC );
 		} catch (PDOException $e) {
-			debug($e->getMessage());
+			if( DB_DEBUG_QUERY )
+			{
+				debug($e->getMessage());
+			} 
+			else
+			{
+				debug('Query Error');
+			}
 			exit;
 		}
 
@@ -290,13 +302,20 @@ class pdo
 
 		if( $statement->errorCode() != '00000' )
 		{
-			$error_msg = $statement->errorInfo();
-			echo('<h1>Query Error: '.$error_msg[0].'</h1>');
-			echo('<h4>('.$error_msg[1].') '.$error_msg[2].'</h4>');
-			echo('<h5>Statement</h4>');
-			echo('<blockquote><code>'.nl2br($template).'</code></blockquote>');
-			echo('<h5>Params</h5>');
-			debug($query_params);
+			if( DB_DEBUG_QUERY )
+			{
+				$error_msg = $statement->errorInfo();
+				echo('<h1>Query Error: '.$error_msg[0].'</h1>');
+				echo('<h4>('.$error_msg[1].') '.$error_msg[2].'</h4>');
+				echo('<h5>Statement</h4>');
+				echo('<blockquote><code>'.nl2br($template).'</code></blockquote>');
+				echo('<h5>Params</h5>');
+				debug($query_params);
+			}
+			else
+			{
+				debug('Query Error');
+			}
 			exit;
 		}
 
