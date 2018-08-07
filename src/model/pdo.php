@@ -2,7 +2,7 @@
 namespace puffin\model;
 use puffin\dsn as dsn;
 
-if( !isset(DB_DEBUG_QUERY) )
+if( !defined('DB_DEBUG_QUERY') )
 {
 	define('DB_DEBUG_QUERY', false);
 }
