@@ -17,6 +17,12 @@ class param
 		$this->sanitized_array = $this->sanitize( $input_array );
 	}
 
+	public function unset( $key )
+	{
+		unset($this->original_array[$key]);
+		unset($this->sanitized_array[$key]);
+	}
+
 	public function params( $raw = false )
 	{
 		if( $raw )
