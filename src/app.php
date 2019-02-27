@@ -50,12 +50,15 @@ class app
 			switch( get_class($e) )
 			{
 				case 'Phroute\Phroute\Exception\HttpRouteNotFoundException':
+					throw new \Exception($e->getMessage(), 404);
 					http_response_code(404);
 					break;
 				case 'Phroute\Phroute\Exception\HttpMethodNotAllowedException':
+					throw new \Exception($e->getMessage(), 403);
 					http_response_code(403);
 					break;
 				default:
+					throw new \Exception($e->getMessage(), 400);
 					http_response_code(400);
 					break;
 			}
