@@ -179,12 +179,8 @@ class pdo
 			if( DB_DEBUG_QUERY )
 			{
 				debug($e->getMessage());
+				exit;
 			} 
-			else
-			{
-				debug('Query Error');
-			}
-			exit;
 		}
 
 		return $results;
@@ -287,15 +283,21 @@ class pdo
 		try {
 			$statement = $this->db->prepare( $template );
 		} catch (PDOException $e) {
-			debug($e->getMessage());
-			exit;
+			if( DB_DEBUG_QUERY )
+			{
+				debug($e->getMessage());
+				exit;
+			}
 		}
 
 		try {
 			$statement->execute( $query_params );
 		} catch (PDOException $e) {
-			debug($e->getMessage());
-			exit;
+			if( DB_DEBUG_QUERY )
+			{
+				debug($e->getMessage());
+				exit;
+			}
 		}
 
 		$this->last_statement = $statement;
@@ -311,12 +313,8 @@ class pdo
 				echo('<blockquote><code>'.nl2br($template).'</code></blockquote>');
 				echo('<h5>Params</h5>');
 				debug($query_params);
+				exit;
 			}
-			else
-			{
-				debug('Query Error');
-			}
-			exit;
 		}
 
 		return $statement;
